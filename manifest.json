@@ -10,7 +10,8 @@
   "permissions": [
     "storage",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "tabs" 
   ],
   "content_scripts": [
     {
@@ -19,10 +20,13 @@
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
         "https://en.wikipedia.org/*"
-      ]
+      ],
+      "module": true
     }
   ],
-  "background": {
-    "service_worker": "scripts/background.js"
-  }
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "content_security_policy": "script-src 'self' https://cdn.jsdelivr.net/; object-src 'self'"
+
 }

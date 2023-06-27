@@ -11,7 +11,25 @@ function handleLinkClick(event) {
         const title = document.getElementById('firstHeading').children[0].innerHTML;        
         const desc = document.getElementsByClassName('shortdescription')[0].innerText;
 
-        // Send a message to the background script with the navigation information
-        chrome.runtime.sendMessage({ currentPageUrl, targetUrl, title, desc });
+        const data = {
+            title: title,
+            desc: desc,
+            current_url: currentPageUrl,
+            target_url: targetUrl
+        };
+        
+        const storageData = {};
+        storageData[currentPageUrl] = data;
+      
+        chrome.storage.local.set(storageData, () => {
+          console.log("Value is set");
+        });
+      
+        chrome.storage.local.get(currentPageUrl, (result) => {
+          console.log(result);
+        });
     }
 }
+
+// chrome.tabs.create({ url: chrome.runtime.getURL("newtab.html") });
+
