@@ -5,44 +5,50 @@ chrome.storage.local.get('data', result => {
 
     const nodes = result['data']['nodes'];
     const links = result['data']['links'];
-    const forceStrength = -1200;
+    
+    chrome.storage.local.get("forceStrength", result => {
+        const strength = Object.keys(result).length === 0 ? -1200 :  result['forceStrength']
+        document.getElementById("range-slider__value").innerHTML = strength * -1;
+        document.getElementById("range-slider__range").value = strength * -1;
 
-    const radioButtons = document.getElementsByClassName('switch-field-input');
-    Array.from(radioButtons).forEach(function (radioButton) {
-        radioButton.addEventListener('click', function () {
-            const timeWindow = this.value * 60 * 60 * 1000; // hours -> ms
-            const newNodes = nodes.filter(function (node) {
-                return node['time'] > Date.now() - timeWindow
-            });
-            const newLinks = links.filter(function (link) {
-                return link['time'] > Date.now() - timeWindow
-            });
+        const radioButtons = document.getElementsByClassName('switch-field-input');
 
-            const element = document.getElementsByTagName("svg")[0];
-            if (element) {
-                element.remove();
-            }
-            drawSVG(newNodes, newLinks, forceStrength);
+        Array.from(radioButtons).forEach(function (radioButton) {
+            radioButton.addEventListener('click', function () {
+                const timeWindow = this.value * 60 * 60 * 1000; // hours -> ms
+                const newNodes = nodes.filter(function (node) {
+                    return node['time'] > Date.now() - timeWindow
+                });
+                const newLinks = links.filter(function (link) {
+                    return link['time'] > Date.now() - timeWindow
+                });
+                drawSVG(newNodes, newLinks, strength);
+            });
         });
-    });
-    const timeWindow = 24 * 60 * 60 * 1000 // hours -> ms (default: 24)
-    const newNodes = nodes.filter(function (node) {
-        return node['time'] > Date.now() - timeWindow
-    });
-    const newLinks = links.filter(function (link) {
-        return link['time'] > Date.now() - timeWindow
-    });
-    drawSVG(newNodes, newLinks, forceStrength);
 
-    const rangeSlider = document.getElementById("range-slider__range");
-    const rangeValue = document.getElementById("range-slider__value");
+        const timeWindow = 24 * 60 * 60 * 1000 // hours -> ms (default: 24)
+        const newNodes = nodes.filter(function (node) {
+            return node['time'] > Date.now() - timeWindow
+        });
+        const newLinks = links.filter(function (link) {
+            return link['time'] > Date.now() - timeWindow
+        });
+        drawSVG(newNodes, newLinks, strength);
 
-    rangeSlider.addEventListener("input", function() {
-        rangeValue.textContent = rangeSlider.value;
-        const forceStrength = -1 * rangeSlider.value
-        drawSVG(newNodes, newLinks, forceStrength);
-    });
+        const rangeSlider = document.getElementById("range-slider__range");
+        const rangeValue = document.getElementById("range-slider__value");
 
+        rangeSlider.addEventListener("input", function () {
+            rangeValue.textContent = rangeSlider.value;
+            const strength = -1 * rangeSlider.value
+            drawSVG(newNodes, newLinks, strength);
+
+            setTimeout(function () {
+                const newForceStrength = { "forceStrength" : strength };
+                chrome.storage.local.set(newForceStrength);
+            }, 500);
+        });
+    })
 });
 
 function drawSVG(nodes, links, forceStrength) {
