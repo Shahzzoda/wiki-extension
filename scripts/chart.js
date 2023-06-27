@@ -5,6 +5,7 @@ chrome.storage.local.get('data', result => {
 
     const nodes = result['data']['nodes'];
     const links = result['data']['links'];
+    const forceStrength = -1200;
 
     const radioButtons = document.getElementsByClassName('switch-field-input');
     Array.from(radioButtons).forEach(function (radioButton) {
@@ -21,7 +22,7 @@ chrome.storage.local.get('data', result => {
             if (element) {
                 element.remove();
             }
-            drawSVG(newNodes, newLinks);
+            drawSVG(newNodes, newLinks, forceStrength);
         });
     });
     const timeWindow = 24 * 60 * 60 * 1000 // hours -> ms (default: 24)
@@ -31,16 +32,26 @@ chrome.storage.local.get('data', result => {
     const newLinks = links.filter(function (link) {
         return link['time'] > Date.now() - timeWindow
     });
+    drawSVG(newNodes, newLinks, forceStrength);
 
+    const rangeSlider = document.getElementById("range-slider__range");
+    const rangeValue = document.getElementById("range-slider__value");
+
+    rangeSlider.addEventListener("input", function() {
+        rangeValue.textContent = rangeSlider.value;
+        const forceStrength = -1 * rangeSlider.value
+        drawSVG(newNodes, newLinks, forceStrength);
+    });
+
+});
+
+function drawSVG(nodes, links, forceStrength) {
+    // before drawing new, delete old.
     const element = document.getElementsByTagName("svg")[0];
     if (element) {
         element.remove();
     }
-    drawSVG(newNodes, newLinks);
 
-});
-
-function drawSVG(nodes, links) {
     const types = ["licensing", "suit", "resolved"];
 
     const height = window.innerHeight * .9;
@@ -57,7 +68,7 @@ function drawSVG(nodes, links) {
 
     const drag = simulation => {
         function dragstarted(event, d) {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
+            if (!event.active) simulation.alphaTarget(0.5).restart();
             d.fx = d.x;
             d.fy = d.y;
         }
@@ -83,10 +94,8 @@ function drawSVG(nodes, links) {
     const d_nodes = nodes.map(d => Object.create(d));
 
     const simulation = d3.forceSimulation(d_nodes)
-        .force("link",
-            d3.forceLink(d_links)
-                .id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-1000))
+        .force("link", d3.forceLink(d_links).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(forceStrength))
         .force("x", d3.forceX())
         .force("y", d3.forceY());
 
