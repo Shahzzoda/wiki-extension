@@ -1,42 +1,33 @@
 <!DOCTYPE html>
 <html>
+    
 <head>
-  <title>New Tab</title>
-  <script src="scripts/d3.v7.js"></script>
-  <script src="scripts/d3.v7.min.js"></script>
-  <script src="scripts/chart.js" type="module"></script>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
-    svg {
-        width: 100%;
-        height: 100%;
-    }
-    div#container {
-        display: flex;
-        height: 90vh;
-    }
-    header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    h1,form {
-        padding: 10px;
-    }
-  </style>
+    <title>New Tab</title>
+    <script src="scripts/d3.v7.min.js"></script>
+    <script src="scripts/chart.js" type="module"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-<body>
-<header>
-    <h1>Your Personal Wiki Journey</h1>
-    <form>
-        <input>time</input>
-        <input>repulsion</input>
-    </form>
-</header>
-<div id="container"></div>
-</body>
-</html>
 
+<body>
+    <header>
+        <h1>Your Personal Wiki Journey</h1>
+        <div class="switch-field">
+            <input type="radio" id="radio-three" name="switch-two" value="yes" checked />
+            <label for="radio-three">24 Hours</label>
+            <input type="radio" id="radio-four" name="switch-two" value="maybe" />
+            <label for="radio-four">48 Hours</label>
+            <input type="radio" id="radio-five" name="switch-two" value="no" />
+            <label for="radio-five">1 week</label>
+        </div>
+    </header>
+    <div id="container"></div>
+    <div id="range-slider">
+        <input id="range-slider__range" type="range" value="1000" min="0" max="1500">
+        <span id="range-slider__value">1000</span>
+    </div>
+
+    <script src="scripts/slider.js"></script>
+    </script>
+</body>
+
+</html>

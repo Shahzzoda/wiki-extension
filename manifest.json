@@ -15,9 +15,11 @@
   ],
   "content_scripts": [
     {
-      "js": [
-        "scripts/content.js"
-    ],
+      "js": ["scripts/content.js"],
+      "css": [
+        "styles/slider.css",
+        "styles/switch.css"
+      ],
       "matches": [
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
@@ -28,5 +30,7 @@
   ],
   "chrome_url_overrides": {
     "newtab": "newtab.html"
-  }
+  },
+  "content_security_policy": "script-src 'self' object-src 'self'"
+
 }

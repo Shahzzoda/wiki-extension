@@ -11,13 +11,13 @@ chrome.storage.local.get('data', result => {
     
     const height = window.innerHeight * .9;
     const width = window.innerWidth;
-    const color = d3.scaleOrdinal(types, d3.schemeCategory10)
+    const color = d3.scaleOrdinal(d3.schemeCategory10)
 
     function linkArc(d) {
-        const r = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
+        const distance = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
         return `
             M${d.source.x},${d.source.y}
-            A${r},${r} 0 0,1 ${d.target.x},${d.target.y}
+            A${distance},${distance} 0 0,1 ${d.target.x},${d.target.y}
         `;
     }
 
@@ -58,7 +58,7 @@ chrome.storage.local.get('data', result => {
 
     const svg = d3.create("svg")
     .attr("viewBox", [-width / 2, -height / 2, width, height])
-    .style("font", "12px sans-serif");
+    .style("font", "12px system-ui, sans-serif");
 
     // Per-type markers, as they don't inherit styles.
     svg.append("defs").selectAll("marker")
@@ -101,8 +101,8 @@ chrome.storage.local.get('data', result => {
     node.append("text")
         .attr("x", 8)
         .attr("y", "0.31em")
-        .attr("dx", -5)
-        .attr("dy", 10)
+        .attr("dx", -2)
+        .attr("dy", 12)
         .append("a")
         .attr("xlink:href", d => d.id) // Set the URL based on the 'url' property
         .text(d => d.label);    
@@ -122,8 +122,9 @@ chrome.storage.local.get('data', result => {
             const textHeight = textBBox.height;
         
             // Apply the dimensions to the rectangle
-            rect.attr("width", textWidth + 10) // Add some padding
-                .attr("height", textHeight + 10); // Add some padding
+            rect.attr("width", textWidth + 15) // Add some padding
+                .attr("height", textHeight + 10) // Add some padding
+                .attr("rx", 5);
           });
         
     });
