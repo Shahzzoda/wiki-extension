@@ -7,27 +7,40 @@ chrome.storage.local.get('data', result => {
     const links = result['data']['links'];
 
     const radioButtons = document.getElementsByClassName('switch-field-input');
-    Array.from(radioButtons).forEach(function(radioButton) {
-        radioButton.addEventListener('click', function() {
-        const timeWindow = this.value * 60 * 60 * 1000; // hours -> ms
-          console.log('Selected valueeee:', this.value);
-          const newNodes = nodes.filter(function(node) {
-              return node['time'] > Date.now() - timeWindow
-          });
-          const newLinks = links.filter(function(link) {
-              return link['time'] > Date.now() - timeWindow
-          });
+    Array.from(radioButtons).forEach(function (radioButton) {
+        radioButton.addEventListener('click', function () {
+            const timeWindow = this.value * 60 * 60 * 1000; // hours -> ms
+            const newNodes = nodes.filter(function (node) {
+                return node['time'] > Date.now() - timeWindow
+            });
+            const newLinks = links.filter(function (link) {
+                return link['time'] > Date.now() - timeWindow
+            });
 
-          const element = document.getElementsByTagName("svg")[0];
-          if (element) {
-            element.remove();
-          }
-          draw(newNodes, newLinks);
+            const element = document.getElementsByTagName("svg")[0];
+            if (element) {
+                element.remove();
+            }
+            drawSVG(newNodes, newLinks);
         });
-      });
+    });
+    const timeWindow = 24 * 60 * 60 * 1000 // hours -> ms (default: 24)
+    const newNodes = nodes.filter(function (node) {
+        return node['time'] > Date.now() - timeWindow
+    });
+    const newLinks = links.filter(function (link) {
+        return link['time'] > Date.now() - timeWindow
+    });
+
+    const element = document.getElementsByTagName("svg")[0];
+    if (element) {
+        element.remove();
+    }
+    drawSVG(newNodes, newLinks);
+
 });
 
-function draw(nodes, links) {
+function drawSVG(nodes, links) {
     const types = ["licensing", "suit", "resolved"];
 
     const height = window.innerHeight * .9;
