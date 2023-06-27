@@ -9,8 +9,8 @@ chrome.storage.local.get('data', result => {
     console.log(nodes)
     console.log(links)
     
-    const height = 600;
-    const width = 1200;
+    const height = window.innerHeight * .9;
+    const width = window.innerWidth;
     const color = d3.scaleOrdinal(types, d3.schemeCategory10)
 
     function linkArc(d) {
@@ -128,5 +128,5 @@ chrome.storage.local.get('data', result => {
         
     });
 
-    document.body.appendChild(svg.node());
+    document.getElementById("container").appendChild(svg.node());
 });
