@@ -4,12 +4,10 @@
   "description": "Base Level Extension",
   "version": "1.0",
   "action": {
-    "default_popup": "popup.html",
     "default_icon": "iroh.png"
   },
   "permissions": [
     "storage",
-    "tabs",
     "webNavigation",
     "tabs" 
   ],
