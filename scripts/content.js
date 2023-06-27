@@ -14,10 +14,12 @@
 const title = document.getElementById('firstHeading').children[0].innerHTML;        
 const desc = document.getElementsByClassName('shortdescription')[0].innerText;
 var currentPageUrl = window.location.href;
+let ms = Date.now();
 const node = {
   label: title,
   desc: desc,
   id: currentPageUrl,
+  time: ms,
 };
 
 chrome.storage.local.get('data', (result) => {  
@@ -45,9 +47,11 @@ document.addEventListener("click", handleLinkClick);
 function handleLinkClick(event) {
   if (event.target.tagName === "A") {
     var targetUrl = event.target.href;
+    let ms = Date.now();
     const link = {
       source: currentPageUrl,
       target: targetUrl,
+      time: ms,
       type: 'licensing',
     };
 

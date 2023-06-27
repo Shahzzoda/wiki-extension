@@ -47,12 +47,14 @@ chrome.storage.local.get('data', result => {
 
     const d_links = links.map(d => Object.create(d));
     const d_nodes = nodes.map(d => Object.create(d));
-
+    
     const simulation = d3.forceSimulation(d_nodes)
-    .force("link", d3.forceLink(d_links).id(d => d.id))
-    .force("charge", d3.forceManyBody().strength(-400))
-    .force("x", d3.forceX())
-    .force("y", d3.forceY());
+    .force("link", 
+        d3.forceLink(d_links)
+        .id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-1000))
+        .force("x", d3.forceX())
+        .force("y", d3.forceY());
 
     const svg = d3.create("svg")
     .attr("viewBox", [-width / 2, -height / 2, width, height])
@@ -91,24 +93,39 @@ chrome.storage.local.get('data', result => {
     .join("g")
     .call(drag(simulation));
 
-    node.append("circle")
+    node.append("rect")
     .attr("stroke", "white")
     .attr("stroke-width", 1.5)
-    .attr("r", 4);
+    .attr("fill", "lightgray");
 
     node.append("text")
         .attr("x", 8)
         .attr("y", "0.31em")
-        .attr("dx", 5)
-        .attr("dy", 5)
+        .attr("dx", -5)
+        .attr("dy", 10)
         .append("a")
         .attr("xlink:href", d => d.id) // Set the URL based on the 'url' property
-        .text(d => d.label);
+        .text(d => d.label);    
 
 
     simulation.on("tick", () => {
-    link.attr("d", linkArc);
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
+        link.attr("d", linkArc);
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
+
+        node.each(function(d) {
+            const rect = d3.select(this).select("rect");
+            const text = d3.select(this).select("text");
+        
+            // Calculate the dimensions of the text element
+            const textBBox = text.node().getBBox();
+            const textWidth = textBBox.width;
+            const textHeight = textBBox.height;
+        
+            // Apply the dimensions to the rectangle
+            rect.attr("width", textWidth + 10) // Add some padding
+                .attr("height", textHeight + 10); // Add some padding
+          });
+        
     });
 
     document.body.appendChild(svg.node());
