@@ -65,6 +65,7 @@ function drawSVG(nodes, links, forceStrength) {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     function linkArc(d) {
+        console.log(d);
         const distance = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
         return `
             M${d.source.x},${d.source.y}
@@ -107,7 +108,7 @@ function drawSVG(nodes, links, forceStrength) {
 
     const svg = d3.create("svg")
         .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .style("font", "12px system-ui, sans-serif");
+        .style("font", "16px system-ui, sans-serif");
 
     // Per-type markers, as they don't inherit styles.
     svg.append("defs").selectAll("marker")
@@ -141,11 +142,14 @@ function drawSVG(nodes, links, forceStrength) {
         .data(d_nodes)
         .join("g")
         .call(drag(simulation));
+    
+    // kinda impossible to see, fix. 
+    node.append("title").attr("innerHTML", d => d.desc);
 
     node.append("rect")
         .attr("stroke", "white")
         .attr("stroke-width", 1.5)
-        .attr("fill", "lightgray");
+        .attr("fill", "#8ecaf4b3");
 
     node.append("text")
         .attr("x", 8)
@@ -153,7 +157,7 @@ function drawSVG(nodes, links, forceStrength) {
         .attr("dx", -2)
         .attr("dy", 12)
         .append("a")
-        .attr("xlink:href", d => d.id) // Set the URL based on the 'url' property
+        .attr("xlink:href", d => d.id) 
         .text(d => d.label);
 
 
@@ -165,17 +169,17 @@ function drawSVG(nodes, links, forceStrength) {
             const rect = d3.select(this).select("rect");
             const text = d3.select(this).select("text");
 
-            // Calculate the dimensions of the text element
             const textBBox = text.node().getBBox();
             const textWidth = textBBox.width;
             const textHeight = textBBox.height;
 
-            // Apply the dimensions to the rectangle
-            rect.attr("width", textWidth + 15) // Add some padding
-                .attr("height", textHeight + 10) // Add some padding
+            rect.attr("width", textWidth + 15) 
+                .attr("height", textHeight + 10) 
                 .attr("rx", 5);
+            
         });
 
+          
     });
 
     document.getElementById("container").appendChild(svg.node());

@@ -2,22 +2,17 @@
   "manifest_version": 3,
   "name": "Hello Extensions",
   "description": "Base Level Extension",
-  "version": "1.0",
+  "version": "1.0.0",
   "action": {
     "default_icon": "iroh.png"
   },
   "permissions": [
     "storage",
-    "webNavigation",
     "tabs" 
   ],
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
-      "css": [
-        "styles/slider.css",
-        "styles/switch.css"
-      ],
       "matches": [
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
@@ -28,7 +23,5 @@
   ],
   "chrome_url_overrides": {
     "newtab": "newtab.html"
-  },
-  "content_security_policy": "script-src 'self' object-src 'self'"
-
+  }
 }
