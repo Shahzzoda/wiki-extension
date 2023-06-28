@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Hello Extensions",
-  "description": "Base Level Extension",
+  "name": "Wiki Journey Explorer",
+  "description": "Visually depicts your journey through the wiki archives",
   "version": "1.0.0",
   "action": {
     "default_icon": "iroh.png"
@@ -16,7 +16,7 @@
       "matches": [
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
-        "https://en.wikipedia.org/*"
+        "https://*.wikipedia.org/*"
       ],
       "module": true
     }
