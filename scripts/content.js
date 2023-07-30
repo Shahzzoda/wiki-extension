@@ -1,4 +1,4 @@
-// chrome.storage.local.clear();
+// chrome.storage.local.clear(); // uncomment during developent to reset data 
 // On each page load, content.js scripts get injected
 // So here, we just want to store all the node information on visit
 // and store a link information when they click anything on the site. 

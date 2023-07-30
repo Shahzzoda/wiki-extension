@@ -8,6 +8,7 @@ Looks like this:
 - slider to control repulsion of wiki nodes
 - the nodes are all links so you can click and revist thenm
 - also draggable + fun ! :D
+- all the settings (time controls and repulsion force) will be saved between session 
 
 # how to try
 1. download these files (git clone, etc)
@@ -19,8 +20,8 @@ Should look like this
 <img width="1840" alt="extension page for devs" src="https://github.com/Shahzzoda/wiki-extension/blob/main/developer_ext.png">
 
 # open tasks 
-- if you open in a new tab and dont visit the site, node is null and therefore you wont see the graph. in chrome's developer console you can see which node is null and visit it to get around
-- saved short description and on `g` hover you can see it as a tooltip. however this is only. ifyou can hit the 5px boder around textbox. cool feature: actual popup cards the way wikipedia does
+- if you open in a new tab and dont visit the site, node is null and therefore you wont see the graph. in chrome's developer console you can see which node is null and visit it to get around/unblock yourself locally
+- i saved a short description, on `g` hover you can see it as a tooltip. however this is only if you can hit the 5px boder around textbox which is obviously hard to do. fixing this is an open task. cool possible feature: actual popup cards the way wikipedia does
 - centering the arrows (`paths`) is nontrivial and perhaps worth the effort for a visually more appealing product.
 
 tech: d3, js, svg, and some chrom api knowledge will help :)
