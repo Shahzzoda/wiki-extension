@@ -17,14 +17,10 @@ function saveTextToLocalStorage() {
 }
 
 function handleInputEvent() {
-    console.log("taking notes ...")
-    // Clear any previous timeout
-        clearTimeout(typingTimeout);
-      
-    // Set a new timeout to trigger the saving process after 1 second of inactivity
+    clearTimeout(typingTimeout);
     typingTimeout = setTimeout(saveTextToLocalStorage, 1000);
 }
   
-document.getElementById('notes').addEventListener('input', handleInputEvent);
+document.getElementById('notetaking').addEventListener('input', handleInputEvent);
 
   

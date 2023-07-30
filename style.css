@@ -20,7 +20,7 @@ div#container {
   height: 90vh;
 }
 
-div#notes textarea {
+div#notetaking textarea {
   height: 100%;
   margin-right: 5px;
 }
