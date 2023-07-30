@@ -14,7 +14,7 @@
 // where x is some int in unix time (ms since jan 01, 1970)
 const title = document.getElementById('firstHeading').children[0].innerHTML;        
 const desc = document.getElementsByClassName('shortdescription')[0].innerText;
-var currentPageUrl = window.location.origin + window.location.pathname; // avoid saving hash
+var currtenPageUrl = window.location.origin + window.location.pathname; // avoid saving hash
 let ms = Date.now();
 const node = {
   label: title,
@@ -23,10 +23,10 @@ const node = {
   time: ms,
 };
 
-chrome.storage.local.get('data', (result) => {  
+chrome.storage.local.get('wikidata', (result) => {  
   if (Object.keys(result).length == 0) {
     const storage = {
-      'data': {
+      'wikidata': {
         'nodes': [node],
         'links': [],
         'exists': [currentPageUrl],
@@ -34,10 +34,10 @@ chrome.storage.local.get('data', (result) => {
     };
     chrome.storage.local.set(storage);
   } else {
-    let existingNodes = new Set(result['data']['exists']);
+    let existingNodes = new Set(result['wikidata']['exists']);
     if (!existingNodes.has(currentPageUrl)) {
-      result['data']['nodes'].push(node);
-      result['data']['exists'].push(currentPageUrl)
+      result['wikidata']['nodes'].push(node);
+      result['wikidata']['exists'].push(currentPageUrl)
       chrome.storage.local.set(result)
     };
   }
@@ -56,9 +56,9 @@ function handleLinkClick(event) {
       type: 'licensing',
     };
 
-    chrome.storage.local.get('data', (result) => {  
+    chrome.storage.local.get('wikidata', (result) => {  
       console.log(result);
-      result['data']['links'].push(link);
+      result['wikidata']['links'].push(link);
       chrome.storage.local.set(result)
     });
   }

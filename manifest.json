@@ -16,7 +16,7 @@
       "matches": [
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
-        "https://*.wikipedia.org/*"
+        "https://*.wikipedia.org/*"     
       ],
       "module": true
     }

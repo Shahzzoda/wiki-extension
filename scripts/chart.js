@@ -1,10 +1,10 @@
-chrome.storage.local.get('data', result => {
+chrome.storage.local.get('wikidata', result => {
     if (Object.keys(result).length === 0) {
         return;
     }
 
-    const nodes = result['data']['nodes'];
-    const links = result['data']['links'];
+    const nodes = result['wikidata']['nodes'];
+    const links = result['wikidata']['links'];
     
     chrome.storage.local.get("forceStrength", result => {
         const strength = Object.keys(result).length === 0 ? -1200 :  result['forceStrength']
