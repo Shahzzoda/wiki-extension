@@ -9,13 +9,74 @@ function getSelectedText() {
     return selectedText;
 }
 
-document.addEventListener('mouseup', function() {
+function saveContent(url, highlight, note) {
+    let ms = Date.now();
+    chrome.storage.local.get('highlightdata', (result) => {  
+        // console.log(result)
+        if (Object.keys(result).length == 0) {
+          const storage = {
+            'highlightdata': {
+                url : [{
+                    'note': note, 
+                    'highlight': highlight, 
+                    'time': ms
+                }]
+            }
+          };
+          chrome.storage.local.set(storage);
+        } else {
+            if (result['highlightdata'][url]) {
+                result['highlightdata'][url].push({
+                    'note': note,
+                    'highlight': highlight,
+                    'time': ms
+                });
+                chrome.storage.local.set(result);
+            } else {
+            result['highlightdata'][url] = [{
+                'note': note,
+                'highlight': highlight,
+                'time': ms
+            }];
+            chrome.storage.local.set(result);
+        }
+        }
+      });
+}
+
+function displaySaveTooltip(selectedText, event) {
+    // The save tooltip element
+    const tooltip = document.createElement("div");
+    tooltip.style.position = "absolute";
+    tooltip.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+    tooltip.style.padding = "5px";
+    tooltip.style.border = "1px solid #ccc";
+    tooltip.style.borderRadius = "5px";
+    tooltip.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.2)";
+    tooltip.style.top = `${event.clientY}px`;
+    tooltip.style.left = `${event.clientX}px`;
+
+    // The textarea element
+    const textarea = document.createElement("textarea");
+    textarea.textContent = "Save this content"; // Use textContent to set the content for textarea
+    tooltip.appendChild(textarea);
+    document.body.appendChild(tooltip);
+
+    // Save on enter 
+    tooltip.addEventListener("keydown", function (event) {
+        if (event.code === 'Enter') {
+            const url = window.location.href;
+            const highlight = selectedText;
+            const note = textarea.value;
+            saveContent(url, highlight, note)
+        }
+
+    });
+}
+document.addEventListener('mouseup', function(event) {
     const selectedText = getSelectedText();
+
     if (selectedText !== "") {
-        console.log("Selected text: ", selectedText);
-        // You can do whatever you want with the selected text here
+        displaySaveTooltip(selectedText, event);
     }
 });
-
-
-console.log("loaded")
