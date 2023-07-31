@@ -8,15 +8,27 @@
   },
   "permissions": [
     "storage",
-    "tabs" 
+    "tabs",
+    "browsingData"
   ],
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
+      "js": [
+        "scripts/content.js"
+      ],
       "matches": [
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
         "https://*.wikipedia.org/*"     
+      ],
+      "module": true
+    },
+    {
+      "js": [
+        "scripts/highlight.js"
+      ],
+      "matches": [
+        "https://*/*"
       ],
       "module": true
     }

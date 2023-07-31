@@ -25,7 +25,7 @@ const node = {
 };
 
 chrome.storage.local.get('data', (result) => {  
-  console.log(result)
+  // console.log(result)
   if (Object.keys(result).length == 0) {
     const storage = {
       'data': {

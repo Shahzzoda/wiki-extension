@@ -9,6 +9,7 @@ Looks like this:
 - the nodes are all links so you can click and revist thenm
 - also draggable + fun ! :D
 - all the settings (time controls and repulsion force) will be saved between session 
+- note taking system 
 
 # how to try
 1. download these files (git clone, etc)
