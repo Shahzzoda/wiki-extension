@@ -41,6 +41,7 @@ function saveContent(url, highlight, note) {
             chrome.storage.local.set(result);
         }
         }
+        document.body.removeChild(tooltip); 
       });
 }
 
