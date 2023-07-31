@@ -1,10 +1,10 @@
-chrome.storage.local.get('wikidata', result => {
+chrome.storage.local.get('data', result => {
     if (Object.keys(result).length === 0) {
         return;
     }
 
-    const nodes = result['wikidata']['nodes'];
-    const links = result['wikidata']['links'];
+    const nodes = result['data']['nodes'];
+    const links = result['data']['links'];
     
     chrome.storage.local.get("forceStrength", result => {
         const strength = Object.keys(result).length === 0 ? -1200 :  result['forceStrength']
@@ -65,7 +65,7 @@ function drawSVG(nodes, links, forceStrength) {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     function linkArc(d) {
-        console.log(d);
+        // console.log(d);
         const distance = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
         return `
             M${d.source.x},${d.source.y}

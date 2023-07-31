@@ -3,6 +3,9 @@ let typingTimeout;
 
 // retrieves from chrome data and stores it in textarea
 chrome.storage.local.get('notes', result => {
+    if (Object.keys(result).length === 0) {
+        return;
+    }
     textarea.value = result['notes'];
 });
 
