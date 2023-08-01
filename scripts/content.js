@@ -27,6 +27,7 @@ const node = {
 chrome.storage.local.get('data', (result) => {  
   // console.log(result)
   if (Object.keys(result).length == 0) {
+    // TODO: change this to a reg hashmap
     const storage = {
       'data': {
         'nodes': [node],

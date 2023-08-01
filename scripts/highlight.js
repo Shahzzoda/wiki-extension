@@ -1,3 +1,4 @@
+// TODO: combine with the content js script.
 function getSelectedText() {
     let selectedText = "";
     if (window.getSelection) {

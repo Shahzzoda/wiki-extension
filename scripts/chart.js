@@ -182,5 +182,5 @@ function drawSVG(nodes, links, forceStrength) {
           
     });
 
-    document.getElementById("container").appendChild(svg.node());
+    document.getElementById("svg-container").appendChild(svg.node());
 };
