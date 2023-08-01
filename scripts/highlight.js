@@ -60,7 +60,7 @@ function displaySaveTooltip(selectedText, event) {
 
     // The textarea element
     const textarea = document.createElement("textarea");
-    textarea.textContent = "Save this content"; // Use textContent to set the content for textarea
+    textarea.textContent = "Enter to save, Esc to close tooltip"; // Use textContent to set the content for textarea
     tooltip.appendChild(textarea);
     document.body.appendChild(tooltip);
 
@@ -71,6 +71,13 @@ function displaySaveTooltip(selectedText, event) {
             const highlight = selectedText;
             const note = textarea.value;
             saveContent(url, highlight, note)
+        }
+    });
+
+    // Close on escape
+    tooltip.addEventListener("keydown", function (event) {
+        if (event.code === 'Escape') {
+            document.body.removeChild(tooltip); 
         }
 
     });

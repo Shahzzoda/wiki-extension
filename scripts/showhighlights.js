@@ -13,8 +13,6 @@ chrome.storage.local.get('highlightdata', (result) => {
     }
 });
 
-
-
 function createDiv(url, note, highlight) {
     // console.log(result);
     const sidebar = document.getElementById("highlights")
