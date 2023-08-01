@@ -49,14 +49,15 @@ function saveContent(url, highlight, note) {
 function displaySaveTooltip(selectedText, event) {
     // The save tooltip element
     const tooltip = document.createElement("div");
+    tooltip.id = "tooltip-iroh-wiki-ext";
     tooltip.style.position = "absolute";
     tooltip.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
     tooltip.style.padding = "5px";
     tooltip.style.border = "1px solid #ccc";
     tooltip.style.borderRadius = "5px";
     tooltip.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.2)";
-    tooltip.style.top = `${event.clientY}px`;
-    tooltip.style.left = `${event.clientX}px`;
+    tooltip.style.top = `${event.layerY}px`;
+    tooltip.style.left = `${event.layerX}px`;
 
     // The textarea element
     const textarea = document.createElement("textarea");
@@ -74,17 +75,28 @@ function displaySaveTooltip(selectedText, event) {
         }
     });
 
-    // Close on escape
+    setTimeout(closeTooltip, 1000);
+}
+
+function closeTooltip() {
+    let tooltip = document.getElementById('tooltip-iroh-wiki-ext')
+    document.addEventListener('click', function(event) {
+        // console.log(event)
+        if (event.target !== 'div#tooltip-iroh-wiki-ext') {
+            // console.log(tooltip)
+            document.body.removeChild(tooltip)
+            console.log("removed")
+        }
+    });
     tooltip.addEventListener("keydown", function (event) {
         if (event.code === 'Escape') {
             document.body.removeChild(tooltip); 
         }
-
     });
 }
+
 document.addEventListener('mouseup', function(event) {
     const selectedText = getSelectedText();
-
     if (selectedText !== "") {
         displaySaveTooltip(selectedText, event);
     }
