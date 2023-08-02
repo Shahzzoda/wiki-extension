@@ -1,9 +1,9 @@
 chrome.storage.local.get('highlightdata', (result) => {  
     const myObject = result['highlightdata']
-    console.log(myObject)
+    // console.log(myObject)
     for (const url in myObject) {
         if (myObject.hasOwnProperty(url)) {
-            console.log(url)
+            // console.log(url)
             for (const i in myObject[url]) {
                 let note = myObject[url][i]['note'];
                 let highlight = myObject[url][i]['highlight']

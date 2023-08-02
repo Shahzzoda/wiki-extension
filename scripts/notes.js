@@ -15,7 +15,7 @@ function saveTextToLocalStorage() {
         'notes':  text
       };
     chrome.storage.local.set(notes, function() {
-        console.log('Text saved to local storage:', text);
+        // console.log('Text saved to local storage:', text);
     });
 }
 

@@ -6,27 +6,48 @@ chrome.storage.local.get('data', result => {
     const nodes = result['data']['nodes'];
     const links = result['data']['links'];
     
-    chrome.storage.local.get("forceStrength", result => {
+    chrome.storage.local.get("forceStrength", async result => {
         const strength = Object.keys(result).length === 0 ? -1200 :  result['forceStrength']
         document.getElementById("range-slider__value").innerHTML = strength * -1;
         document.getElementById("range-slider__range").value = strength * -1;
 
         const radioButtons = document.getElementsByClassName('switch-field-input');
+        let timeWindow = await chrome.storage.local.get("timeWindow");
+        if (timeWindow['timeWindow']) {
+            timeWindow = timeWindow['timeWindow']
+        } else {
+            timeWindow = 24 * 60 * 60 * 1000;
+        }
+        // default radio button should be blue
+        let twValue = timeWindow/60/60/1000;
+        const check = document.querySelectorAll(`input[value="${twValue}"]`)[0];
+        check.nextElementSibling.classList.add('checked')
 
         Array.from(radioButtons).forEach(function (radioButton) {
-            radioButton.addEventListener('click', function () {
-                const timeWindow = this.value * 60 * 60 * 1000; // hours -> ms
+
+            radioButton.addEventListener('click', function (event) {
+                let timeW = {"timeWindow" : this.value * 60 * 60 * 1000};
+                chrome.storage.local.set(timeW);
                 const newNodes = nodes.filter(function (node) {
                     return node['time'] > Date.now() - timeWindow
                 });
                 const newLinks = links.filter(function (link) {
                     return link['time'] > Date.now() - timeWindow
-                });
+                });                
+
+
+                // remove unchecked
+                const checked = document.getElementsByClassName('checked')[0];
+                checked.classList.remove('checked');
+                // check the right value
+                const check = document.querySelectorAll(`input[value="${this.value}"]`)[0];
+                check.nextElementSibling.classList.add('checked')
+
                 drawSVG(newNodes, newLinks, strength);
             });
         });
 
-        const timeWindow = 24 * 60 * 60 * 1000 // hours -> ms (default: 24)
+        
         const newNodes = nodes.filter(function (node) {
             return node['time'] > Date.now() - timeWindow
         });
@@ -184,3 +205,13 @@ function drawSVG(nodes, links, forceStrength) {
 
     document.getElementById("svg-container").appendChild(svg.node());
 };
+
+
+function handleVisualsForTime(newSelected){
+    console.log("butt pressed")
+    const input = document.querySelectorAll('.switch-field-input:checked')
+    const checked = input[0];
+    const check = document.querySelectorAll(`input[value="${newSelected}"]`);
+    checked.checked = false;
+    check.checked = true;
+}

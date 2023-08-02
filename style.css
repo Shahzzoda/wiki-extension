@@ -77,7 +77,7 @@ form {
   cursor: pointer;
 }
 
-.switch-field input:checked+label {
+label.checked {
   background-color: #8ecaf4;
   box-shadow: none;
 }
