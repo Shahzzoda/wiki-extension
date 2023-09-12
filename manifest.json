@@ -6,6 +6,12 @@
   "action": {
     "default_icon": "iroh.png"
   },
+  "icons": {
+    "16": "iroh.png",
+    "32": "iroh.png",
+    "48": "iroh.png",
+    "128": "iroh.png"
+  },
   "permissions": [
     "storage",
     "tabs",

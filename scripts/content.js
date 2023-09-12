@@ -24,7 +24,7 @@ const node = {
   time: ms,
 };
 
-chrome.storage.local.get('data', (result) => {  
+chrome.storage.local.get('data', (result) => {
   // console.log(result)
   if (Object.keys(result).length == 0) {
     // TODO: change this to a reg hashmap
@@ -58,7 +58,7 @@ function handleLinkClick(event) {
       type: 'licensing',
     };
 
-    chrome.storage.local.get('data', (result) => {  
+    chrome.storage.local.get('data', (result) => {
       console.log(result);
       result['data']['links'].push(link);
       chrome.storage.local.set(result)
