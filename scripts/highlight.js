@@ -1,98 +1,89 @@
-// TODO: combine with the content js script.
-function getSelectedText() {
-    let selectedText = "";
-    if (window.getSelection) {
-        selectedText = window.getSelection().toString();
-    } else if (document.selection && document.selection.type != "Control") {
-        // For older IE versions (prior to IE 9)
-        selectedText = document.selection.createRange().text;
+class HighlightManager {
+    constructor() {
+        this.tooltip = null;
+        this.init();
     }
-    return selectedText;
-}
 
-function saveContent(url, highlight, note) {
-    let ms = Date.now();
-    const tooltip = document.getElementById('tooltip-iroh-wiki-ext');
-    chrome.storage.local.get('highlightdata', (result) => {
-        // console.log(result)
-        if (Object.keys(result).length == 0) {
-            const storage = {
-                'highlightdata': {
-                    url: [{
-                        'note': note,
-                        'highlight': highlight,
-                        'time': ms
-                    }]
-                }
-            };
-            chrome.storage.local.set(storage);
-            // remove after sabing
-            document.body.removeChild(tooltip);
-        } else {
-            if (result['highlightdata'][url]) {
-                result['highlightdata'][url].push({
-                    'note': note,
-                    'highlight': highlight,
-                    'time': ms
-                });
-                chrome.storage.local.set(result);
-            } else {
-                result['highlightdata'][url] = [{
-                    'note': note,
-                    'highlight': highlight,
-                    'time': ms
-                }];
-                chrome.storage.local.set(result);
-                // remove after saving
-                document.body.removeChild(tooltip);
+    init() {
+        document.addEventListener('mouseup', (event) => {
+            const selectedText = this.getSelectedText();
+            if (selectedText) {
+                this.displaySaveTooltip(selectedText, event);
             }
+        });
+    }
+
+    getSelectedText() {
+        let selectedText = '';
+        if (window.getSelection) {
+            selectedText = window.getSelection().toString();
+        } else if (document.selection && document.selection.type != 'Control') {
+            selectedText = document.selection.createRange().text;
         }
-    });
+        return selectedText.trim();
+    }
+
+    saveContent(url, highlight, note) {
+        const ms = Date.now();
+        chrome.storage.local.get({ highlightdata: {} }, (result) => {
+            const storage = result.highlightdata;
+
+            if (storage[url]) {
+                storage[url].push({ note, highlight, time: ms });
+            } else {
+                storage[url] = [{ note, highlight, time: ms }];
+            }
+
+            chrome.storage.local.set({ highlightdata: storage }, () => {
+                this.removeTooltip();
+            });
+        });
+    }
+
+    displaySaveTooltip(selectedText, event) {
+        this.removeTooltip(); // Ensure there's only one tooltip at a time
+
+        this.tooltip = document.createElement('div');
+        this.tooltip.id = 'tooltip-iroh-wiki-ext';
+        this.tooltip.className = 'tooltip-iroh-wiki-ext-class';
+        this.tooltip.style.position = 'absolute';
+        this.tooltip.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        this.tooltip.style.padding = '5px';
+        this.tooltip.style.border = '1px solid #ccc';
+        this.tooltip.style.borderRadius = '5px';
+        this.tooltip.style.boxShadow = '2px 2px 5px rgba(0, 0, 0, 0.2)';
+        this.tooltip.style.top = `${event.pageY}px`;
+        this.tooltip.style.left = `${event.pageX}px`;
+
+        const textarea = document.createElement('textarea');
+        textarea.textContent = 'Enter to save, Esc to close tooltip';
+        textarea.className = 'tooltip-iroh-wiki-ext-textarea';
+        this.tooltip.appendChild(textarea);
+
+        document.body.appendChild(this.tooltip);
+
+        const keydownHandler = (e) => {
+            if (e.code === 'Enter') {
+                const url = window.location.href;
+                const highlight = selectedText;
+                const note = textarea.value;
+                this.saveContent(url, highlight, note);
+                document.removeEventListener('keydown', keydownHandler);
+            } else if (e.code === 'Escape') {
+                this.removeTooltip();
+                document.removeEventListener('keydown', keydownHandler);
+            }
+        };
+
+        document.addEventListener('keydown', keydownHandler);
+    }
+
+    removeTooltip() {
+        if (this.tooltip && this.tooltip.parentNode) {
+            this.tooltip.parentNode.removeChild(this.tooltip);
+            this.tooltip = null;
+        }
+    }
 }
 
-function displaySaveTooltip(selectedText, event) {
-    // console.log(event);
-    // The save tooltip element
-    const tooltip = document.createElement("div");
-    tooltip.id = "tooltip-iroh-wiki-ext";
-    tooltip.class = "tooltip-iroh-wiki-ext-class";
-    tooltip.style.position = "absolute";
-    tooltip.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
-    tooltip.style.padding = "5px";
-    tooltip.style.border = "1px solid #ccc";
-    tooltip.style.borderRadius = "5px";
-    tooltip.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.2)";
-    tooltip.style.top = `${event.pageY}px`;
-    tooltip.style.left = `${event.pageX}px`;
-
-    // The textarea element
-    const textarea = document.createElement("textarea");
-    textarea.textContent = "Enter to save, Esc to close tooltip"; // Use textContent to set the content for textarea
-    textarea.classList = ['tooltip-iroh-wiki-ext-textarea']
-    tooltip.appendChild(textarea);
-    document.body.appendChild(tooltip);
-
-    function keydownHandler(event) {
-        // save contents
-        if (event.code === 'Enter') {
-            const url = window.location.href;
-            const highlight = selectedText;
-            const note = textarea.value;
-            saveContent(url, highlight, note);
-        }
-        // cancel
-        if (event.code === 'Escape' && document.body.contains(tooltip)) {
-            tooltip.parentNode.removeChild(tooltip);
-            // Remove the event listener to prevent memory leaks and unexpected behaviors
-        }
-        document.removeEventListener("keydown", keydownHandler);
-    }
-    document.addEventListener("keydown", keydownHandler);
-}
-
-document.addEventListener('mouseup', function (event) {
-    const selectedText = getSelectedText();
-    if (selectedText !== "") {
-        displaySaveTooltip(selectedText, event);
-    }
-});
+new HighlightManager();
