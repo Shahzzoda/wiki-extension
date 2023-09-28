@@ -12,7 +12,7 @@
 // exists: ["url1", "url2"]
 // }
 // where x is some int in unix time (ms since jan 01, 1970)
-const title = document.getElementById('firstHeading').children[0].innerHTML;        
+const title = document.getElementById('firstHeading').children[0].innerHTML;
 const desc = document.getElementsByClassName('shortdescription')[0].innerText;
 var currentPageUrl = window.location.origin + window.location.pathname; // avoid saving hash
 
