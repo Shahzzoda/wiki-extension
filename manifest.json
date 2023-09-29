@@ -4,13 +4,13 @@
   "description": "Visually depicts your journey through the wiki archives",
   "version": "1.0.0",
   "action": {
-    "default_icon": "iroh.png"
+    "default_icon": "img/iroh.png"
   },
   "icons": {
-    "16": "iroh.png",
-    "32": "iroh.png",
-    "48": "iroh.png",
-    "128": "iroh.png"
+    "16": "img/iroh.png",
+    "32": "img/iroh.png",
+    "48": "img/iroh.png",
+    "128": "img/iroh.png"
   },
   "permissions": [
     "storage",
@@ -25,7 +25,7 @@
       "matches": [
         "https://developer.chrome.com/docs/extensions/*",
         "https://developer.chrome.com/docs/webstore/*",
-        "https://*.wikipedia.org/*"     
+        "https://*.wikipedia.org/*"
       ],
       "module": true
     },

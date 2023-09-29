@@ -1,7 +1,7 @@
 # wiki-extension
 a **chrome extension** that visualizes what youve been exploring on wikipedia and saves it as your new tab so you can recall more often. 
 Looks like this:
-<img width="1409" alt="new tab page" src="https://github.com/Shahzzoda/wiki-extension/blob/main/main.png">
+<img width="1409" alt="new tab page" src="https://github.com/Shahzzoda/wiki-extension/blob/main/img/main.png">
 
 # how to use
 1. read wiki pages
@@ -23,7 +23,7 @@ Looks like this:
 4. press load unpacked
 5. go to this folder and open
 Should look like this
-<img width="1840" alt="extension page for devs" src="https://github.com/Shahzzoda/wiki-extension/blob/main/developer_ext.png">
+<img width="1840" alt="extension page for devs" src="https://github.com/Shahzzoda/wiki-extension/blob/main/img/developer_ext.png">
 
 # open tasks 
 - if you open in a new tab and dont visit the site, node is null and therefore you wont see the graph. in chrome's developer console you can see which node is null and visit it to get around/unblock yourself locally
