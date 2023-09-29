@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html>
-    
+
 <head>
     <title>New Tab</title>
-    <script src="scripts/d3.v7.min.js"></script>
+    <script src="scripts/libraries/d3.v7.min.js"></script>
     <script src="scripts/chart.js" type="module"></script>
     <script src="scripts/notes.js" type="module"></script>
     <script src="scripts/showhighlights.js" type="module"></script>
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
 
 <body>
     <header>
         <!-- change name, sounds cringe like ad -->
-        <h1>Your Personal Wiki Journey</h1> 
+        <h1>Your Personal Wiki Journey</h1>
         <div class="switch-field">
-            <input class="switch-field-input" type="radio" id="radio-three" name="switch-two" value="24"/>
+            <input class="switch-field-input" type="radio" id="radio-three" name="switch-two" value="24" />
             <label for="radio-three">24 Hours</label>
             <input class="switch-field-input" type="radio" id="radio-four" name="switch-two" value="48" />
             <label for="radio-four">48 Hours</label>
@@ -29,7 +30,8 @@
             <div id="svg-container" class="col-9"> <!--svg wikimap container--> </div>
             <div id="sidebar" class="col-3 gx-0">
                 <div id="notetaking">
-                    <textarea id="notetextarea" name="Notes" id="" cols="30" rows="10" placeholder="save any notes here"></textarea>
+                    <textarea id="notetextarea" name="Notes" id="" cols="30" rows="10"
+                        placeholder="save any notes here"></textarea>
                 </div>
                 <div id="highlights">
                     <!-- stuff here -->
