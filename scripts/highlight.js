@@ -7,7 +7,7 @@ class HighlightManager {
     init() {
         document.addEventListener('mouseup', (event) => {
             const selectedText = this.getSelectedText();
-            if (selectedText) {
+            if (event.shiftKey && selectedText) {
                 this.displaySaveTooltip(selectedText, event);
             }
         });

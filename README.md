@@ -3,6 +3,11 @@ a **chrome extension** that visualizes what youve been exploring on wikipedia an
 Looks like this:
 <img width="1409" alt="new tab page" src="https://github.com/Shahzzoda/wiki-extension/blob/main/main.png">
 
+# how to use
+1. read wiki pages
+2. save notes on new tab
+3. shift and highlight to save notes from anywhere on the internet 
+
 # features
 - time control so you can revisit and recollect the sites you explored last x days (1, 2, and 7 days -- if you know a bit of coding, its extremely easy to customize this)
 - slider to control repulsion of wiki nodes
