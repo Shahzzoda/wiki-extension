@@ -140,8 +140,8 @@ function drawSVG(nodes, links, forceStrength) {
     const simulation = d3.forceSimulation(d_nodes)
         .force("link", d3.forceLink(d_links).id(d => d.id))
         .force("charge", d3.forceManyBody().strength(forceStrength))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY());
+        .force("x", d3.forceX().strength(0.02))
+        .force("y", d3.forceY().strength(0.02));
 
     const svg = d3.create("svg")
         .attr("viewBox", [-width / 2, -height / 2, width, height])
