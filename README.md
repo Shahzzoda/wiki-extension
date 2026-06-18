@@ -11,7 +11,7 @@ Looks like this:
 # features
 - time control so you can revisit and recollect the sites you explored last x days (1, 2, and 7 days -- if you know a bit of coding, its extremely easy to customize this)
 - slider to control repulsion of wiki nodes
-- the nodes are all links so you can click and revist thenm
+- the nodes are all links so you can click and revisit them
 - also draggable + fun ! :D
 - all the settings (time controls and repulsion force) will be saved between session 
 - note taking system to have your own notes and to save any highlights you have from any webpage
@@ -26,8 +26,6 @@ Should look like this
 <img width="1840" alt="extension page for devs" src="https://github.com/Shahzzoda/wiki-extension/blob/main/img/developer_ext.png">
 
 # open tasks 
-- if you open in a new tab and dont visit the site, node is null and therefore you wont see the graph. in chrome's developer console you can see which node is null and visit it to get around/unblock yourself locally
-- i saved a short description, on `g` hover you can see it as a tooltip. however this is only if you can hit the 5px boder around textbox which is obviously hard to do. fixing this is an open task. cool possible feature: actual popup cards the way wikipedia does
-- centering the arrows (`paths`) is nontrivial and perhaps worth the effort for a visually more appealing product.
+- dont love the spacing around the map yet, will work on the ui of that
 
-tech: d3, js, svg, and some chrom api knowledge will help :)
+tech: d3, js, svg, and some chrome api knowledge will help :)

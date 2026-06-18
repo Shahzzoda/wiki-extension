@@ -25,6 +25,12 @@ class HighlightManager {
 
     saveContent(url, highlight, note) {
         const ms = Date.now();
+        // if the extension was reloaded, this injected script is orphaned and
+        // chrome.storage is gone — bail quietly instead of throwing.
+        if (!chrome?.storage?.local) {
+            this.removeTooltip();
+            return;
+        }
         chrome.storage.local.get({ highlightdata: {} }, (result) => {
             const storage = result.highlightdata;
 
