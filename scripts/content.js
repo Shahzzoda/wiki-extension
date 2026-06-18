@@ -16,7 +16,21 @@ const headingEl = document.getElementById('firstHeading');
 const title = headingEl ? headingEl.textContent.trim() : document.title;
 const descEl = document.getElementsByClassName('shortdescription')[0];
 const desc = descEl ? descEl.innerText : '';
+// strip hash/query so a page always has one stable id (matches node ids)
+const normalize = (url) => {
+  try {
+    const u = new URL(url);
+    return u.origin + u.pathname;
+  } catch (e) {
+    return null;
+  }
+};
+
 var currentPageUrl = window.location.origin + window.location.pathname; // avoid saving hash
+
+// the page we arrived from — this, not click-tracking, is the rabbit-hole edge.
+// recording on load (instead of on click) means the write can't be lost to navigation.
+const referrer = normalize(document.referrer);
 
 let ms = Date.now();
 const node = {
@@ -27,43 +41,32 @@ const node = {
 };
 
 chrome.storage.local.get('data', (result) => {
-  // console.log(result)
-  if (Object.keys(result).length == 0) {
-    // TODO: change this to a reg hashmap
-    const storage = {
-      'data': {
-        'nodes': [node],
-        'links': [],
-        'exists': [currentPageUrl],
-      }
-    };
-    chrome.storage.local.set(storage);
-  } else {
-    let existingNodes = new Set(result['data']['exists']);
-    if (!existingNodes.has(currentPageUrl)) {
-      result['data']['nodes'].push(node);
-      result['data']['exists'].push(currentPageUrl)
-      chrome.storage.local.set(result)
-    };
+  const data = result['data'] || { nodes: [], links: [], exists: [] };
+  data.nodes = data.nodes || [];
+  data.links = data.links || [];
+  data.exists = data.exists || [];
+
+  // store this page as a node, once per url
+  if (!data.exists.includes(currentPageUrl)) {
+    data.nodes.push(node);
+    data.exists.push(currentPageUrl);
   }
+
+  // connect referrer -> current page, but only if both are real visited nodes
+  // (filters out external entry points like google) and the edge is new.
+  if (referrer && referrer !== currentPageUrl && data.exists.includes(referrer)) {
+    const dupe = data.links.some(
+      (l) => l.source === referrer && l.target === currentPageUrl
+    );
+    if (!dupe) {
+      data.links.push({
+        source: referrer,
+        target: currentPageUrl,
+        time: ms,
+        type: 'licensing',
+      });
+    }
+  }
+
+  chrome.storage.local.set({ data });
 });
-
-document.addEventListener("click", handleLinkClick);
-function handleLinkClick(event) {
-  if (event.target.tagName === "A") {
-    var targetUrl = event.target.href;
-    let ms = Date.now();
-    const link = {
-      source: currentPageUrl,
-      target: targetUrl,
-      time: ms,
-      type: 'licensing',
-    };
-
-    chrome.storage.local.get('data', (result) => {
-      console.log(result);
-      result['data']['links'].push(link);
-      chrome.storage.local.set(result)
-    });
-  }
-}
