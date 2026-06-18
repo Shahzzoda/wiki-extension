@@ -4,13 +4,13 @@
   "description": "Visually depicts your journey through the wiki archives",
   "version": "1.0.0",
   "action": {
-    "default_icon": "img/iroh.png"
+    "default_icon": "img/pickaxe.png"
   },
   "icons": {
-    "16": "img/iroh.png",
-    "32": "img/iroh.png",
-    "48": "img/iroh.png",
-    "128": "img/iroh.png"
+    "16": "img/pickaxe.png",
+    "32": "img/pickaxe.png",
+    "48": "img/pickaxe.png",
+    "128": "img/pickaxe.png"
   },
   "permissions": [
     "storage",

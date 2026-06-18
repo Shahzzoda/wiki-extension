@@ -52,7 +52,7 @@ div#notetaking textarea {
   display: block;
   color: #8a9aa9;
   font-size: 12px;
-  margin: 2px 0 4px;
+  margin: 0 2px;
 }
 
 header {
@@ -119,7 +119,12 @@ label.checked {
 
 /* credit: https://codepen.io/seanstopnik/pen/nKjmPX/ */
 #range-slider {
-  margin: 4px 0 0 0;
+  margin: 0;
+}
+
+/* keep the hint on its own line so the slider + value don't get squeezed */
+#range-slider .hint {
+  flex-basis: 100%;
 }
 
 #range-slider {
@@ -129,6 +134,7 @@ label.checked {
 
 #range-slider__range {
   width: calc(100% - (73px));
+  min-width: 0;
   height: 10px;
   border-radius: 5px;
   background: #d7dcdf;

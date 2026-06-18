@@ -32,11 +32,13 @@ function createDiv(url, note, highlight) {
     let a = document.createElement("a");
     a.className = "hl-src";
     a.href = url;
-    a.textContent = "src";
+    a.textContent = "[src]";
+
+    pnote.appendChild(document.createTextNode(" "));
+    pnote.appendChild(a);
 
     component.appendChild(quote)
     component.appendChild(pnote)
-    component.appendChild(a)
     componentparent.appendChild(component);
     
     sidebar.appendChild(componentparent);
