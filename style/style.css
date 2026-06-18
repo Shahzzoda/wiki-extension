@@ -11,6 +11,20 @@ svg {
   height: 100%;
 }
 
+/* keep wiki-map labels on-brand: Bootstrap shouldn't recolor/underline them */
+#svg-container svg text,
+#svg-container svg text a {
+  fill: #334e68;
+  font-weight: 500;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#svg-container svg rect {
+  transition: stroke 0.15s ease;
+}
+
 div#notetaking {
   height: 45vh;
 }
@@ -21,11 +35,24 @@ div#highlights {
 }
 
 div#notetaking textarea {
-  height: 98%;
+  height: calc(100% - 24px);
   margin-right: 5px;
   font-family: monospace;
   font-size: smaller;
   width: 95%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #d7dcdf;
+  border-radius: 6px;
+  outline: none;
+  resize: none;
+}
+
+.hint {
+  display: block;
+  color: #8a9aa9;
+  font-size: 12px;
+  margin: 2px 0 4px;
 }
 
 header {
@@ -92,7 +119,7 @@ label.checked {
 
 /* credit: https://codepen.io/seanstopnik/pen/nKjmPX/ */
 #range-slider {
-  margin: 20px 0 0 0;
+  margin: 4px 0 0 0;
 }
 
 #range-slider {
@@ -113,6 +140,28 @@ label.checked {
 div#highlights .card .card-body p {
   margin: 0;
   padding: 0;
+}
+
+#highlights .hint {
+  margin-top: 8px;
+}
+
+.hl-quote {
+  margin: 0 0 6px;
+  padding-left: 8px;
+  border-left: 3px solid #e0e0e0;
+  color: #9aa7b2;
+  font-style: italic;
+}
+
+.hl-src {
+  color: #8ecaf4;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.hl-src:hover {
+  text-decoration: underline;
 }
 
 /* div {

@@ -83,14 +83,22 @@ function drawSVG(nodes, links, forceStrength) {
 
     const height = window.innerHeight * 0.9;
     const width = window.innerWidth;
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // cohesive minimalist palette (accent: #8ecaf4)
+    const LINK_COLOR = "#c2d1e6";
+    const LINK_HIGHLIGHT = "#5b8fb9";
+    const NODE_FILL = "#eef6fd";
+    const NODE_STROKE = "#8ecaf4";
+    const NODE_STROKE_HIGHLIGHT = "#3f88c5";
+    const TEXT_COLOR = "#334e68";
 
     function linkArc(d) {
-        console.log(d)
         const distance = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
+        // a gentle, flatter arc reads cleaner than a tight bow
+        const r = distance * 1.6;
         return `
             M${d.source.x},${d.source.y}
-            A${distance},${distance} 0 0,1 ${d.target.x},${d.target.y}
+            A${r},${r} 0 0,1 ${d.target.x},${d.target.y}
         `;
     }
 
@@ -118,8 +126,16 @@ function drawSVG(nodes, links, forceStrength) {
             .on("end", dragended);
     };
 
-    const d_links = links.map(d => ({ ...d }));
     const d_nodes = nodes.map(d => ({ ...d }));
+
+    // d3.forceLink throws "node not found" if a link points to a page that was
+    // clicked but never visited (so it was never stored as a node). Drop those
+    // dangling links so one of them can't abort the whole render.
+    const nodeIds = new Set(d_nodes.map(d => d.id));
+    const linkId = end => (typeof end === "object" ? end.id : end);
+    const d_links = links
+        .filter(l => nodeIds.has(linkId(l.source)) && nodeIds.has(linkId(l.target)))
+        .map(d => ({ ...d }));
 
     const simulation = d3.forceSimulation(d_nodes)
         .force("link", d3.forceLink(d_links).id(d => d.id))
@@ -129,72 +145,117 @@ function drawSVG(nodes, links, forceStrength) {
 
     const svg = d3.create("svg")
         .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .style("font", "16px system-ui, sans-serif");
+        .style("font", "15px system-ui, sans-serif");
 
-    svg.append("defs").selectAll("marker")
+    const defs = svg.append("defs");
+
+    // soft drop shadow to lift node cards off the page
+    const shadow = defs.append("filter")
+        .attr("id", "node-shadow")
+        .attr("x", "-50%").attr("y", "-50%")
+        .attr("width", "200%").attr("height", "200%");
+    shadow.append("feDropShadow")
+        .attr("dx", 0).attr("dy", 1)
+        .attr("stdDeviation", 2)
+        .attr("flood-color", "#1f3a5f")
+        .attr("flood-opacity", 0.18);
+
+    defs.selectAll("marker")
         .data(types)
         .join("marker")
         .attr("id", d => `arrow-${d}`)
         .attr("viewBox", "0 -5 10 10")
         .attr("refX", 15)
         .attr("refY", -0.5)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
+        .attr("markerWidth", 5)
+        .attr("markerHeight", 5)
         .attr("orient", "auto")
         .append("path")
-        .attr("fill", color)
+        .attr("fill", LINK_COLOR)
         .attr("d", "M0,-5L10,0L0,5");
 
     const link = svg.append("g")
         .attr("fill", "none")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 1.25)
+        .attr("stroke-opacity", 0.7)
         .selectAll("path")
         .data(d_links)
         .join("path")
-        .attr("stroke", d => color(d.type))
+        .attr("stroke", LINK_COLOR)
         .attr("marker-end", d => `url(#arrow-${d.type})`);
 
     const node = svg.append("g")
-        .attr("fill", "currentColor")
         .attr("stroke-linecap", "round")
         .attr("stroke-linejoin", "round")
         .selectAll("g")
         .data(d_nodes)
         .join("g")
+        .style("cursor", "pointer")
         .call(drag(simulation));
 
     node.append("title").text(d => d.desc);
 
     const rect = node.append("rect")
-        .attr("stroke", "white")
+        .attr("fill", NODE_FILL)
+        .attr("stroke", NODE_STROKE)
         .attr("stroke-width", 1.5)
-        .attr("fill", "#8ecaf4b3");
+        .attr("filter", "url(#node-shadow)");
 
-    const text = node.append("text")
-        .attr("x", 8)
-        .attr("y", "0.31em")
-        .attr("dx", -2)
-        .attr("dy", 12)
+    node.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("fill", TEXT_COLOR)
         .append("a")
         .attr("xlink:href", d => d.id)
         .text(d => d.label);
+
+    // adjacency for hover highlighting
+    const linkedByIndex = new Set();
+    d_links.forEach(d => linkedByIndex.add(`${d.source.index},${d.target.index}`));
+    const isConnected = (a, b) =>
+        a.index === b.index ||
+        linkedByIndex.has(`${a.index},${b.index}`) ||
+        linkedByIndex.has(`${b.index},${a.index}`);
+
+    node.on("mouseenter", (event, d) => {
+        node.transition().duration(150)
+            .style("opacity", o => isConnected(d, o) ? 1 : 0.15);
+        rect.transition().duration(150)
+            .attr("stroke", o => isConnected(d, o) ? NODE_STROKE_HIGHLIGHT : NODE_STROKE);
+        link.transition().duration(150)
+            .attr("stroke", l => (l.source === d || l.target === d) ? LINK_HIGHLIGHT : LINK_COLOR)
+            .attr("stroke-opacity", l => (l.source === d || l.target === d) ? 0.95 : 0.12);
+        d3.select(event.currentTarget).raise();
+    });
+
+    node.on("mouseleave", () => {
+        node.transition().duration(150).style("opacity", 1);
+        rect.transition().duration(150).attr("stroke", NODE_STROKE);
+        link.transition().duration(150)
+            .attr("stroke", LINK_COLOR)
+            .attr("stroke-opacity", 0.7);
+    });
 
     simulation.on("tick", () => {
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})`);
 
-        node.each(function (d) {
+        node.each(function () {
             const currentNode = d3.select(this);
             const rect = currentNode.select("rect");
-            const text = currentNode.select("text");
+            const textBBox = currentNode.select("text").node().getBBox();
 
-            const textBBox = text.node().getBBox();
-            const textWidth = textBBox.width;
-            const textHeight = textBBox.height;
+            const padX = 12;
+            const padY = 7;
+            const w = textBBox.width + padX * 2;
+            const h = textBBox.height + padY * 2;
 
-            rect.attr("width", textWidth + 15)
-                .attr("height", textHeight + 10)
-                .attr("rx", 5);
+            // center the pill on the node origin so text + arrows align
+            rect.attr("x", -w / 2)
+                .attr("y", -h / 2)
+                .attr("width", w)
+                .attr("height", h)
+                .attr("rx", h / 2);
         });
     });
 

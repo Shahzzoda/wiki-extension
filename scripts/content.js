@@ -12,8 +12,10 @@
 // exists: ["url1", "url2"]
 // }
 // where x is some int in unix time (ms since jan 01, 1970)
-const title = document.getElementById('firstHeading').children[0].innerHTML;
-const desc = document.getElementsByClassName('shortdescription')[0].innerText;
+const headingEl = document.getElementById('firstHeading');
+const title = headingEl ? headingEl.textContent.trim() : document.title;
+const descEl = document.getElementsByClassName('shortdescription')[0];
+const desc = descEl ? descEl.innerText : '';
 var currentPageUrl = window.location.origin + window.location.pathname; // avoid saving hash
 
 let ms = Date.now();

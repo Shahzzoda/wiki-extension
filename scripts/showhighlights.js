@@ -21,14 +21,20 @@ function createDiv(url, note, highlight) {
     const component = document.createElement("div");
     component.classList = ['card-body'];
 
-    let phighlight = document.createElement("p");
-    phighlight.textContent = highlight;
-    let a = document.createElement("a");
-    a.href = url;
-    a.appendChild(phighlight)
-    let pnote = document.createElement("p");
-    pnote.textContent = note
+    let quote = document.createElement("blockquote");
+    quote.className = "hl-quote";
+    quote.textContent = highlight;
 
+    let pnote = document.createElement("p");
+    pnote.className = "hl-note";
+    pnote.textContent = note;
+
+    let a = document.createElement("a");
+    a.className = "hl-src";
+    a.href = url;
+    a.textContent = "src";
+
+    component.appendChild(quote)
     component.appendChild(pnote)
     component.appendChild(a)
     componentparent.appendChild(component);

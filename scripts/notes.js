@@ -26,4 +26,12 @@ function handleInputEvent() {
   
 document.getElementById('notetaking').addEventListener('input', handleInputEvent);
 
+// Enter saves immediately; Shift+Enter inserts a new line.
+textarea.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        saveTextToLocalStorage();
+    }
+});
+
   

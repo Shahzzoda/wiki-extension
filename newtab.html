@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <title>New Tab</title>
     <script src="scripts/libraries/d3.v7.min.js"></script>
     <script src="scripts/chart.js" type="module"></script>
@@ -27,18 +28,22 @@
     </header>
     <div id="container">
         <div class="row">
-            <div id="svg-container" class="col-9"> <!--svg wikimap container--> </div>
+            <div id="svg-container" class="col-9">
+                <small class="hint">Your wiki rabbit-hole map — drag nodes around, click one to revisit that page.</small>
+            </div>
             <div id="sidebar" class="col-3 gx-0">
                 <div id="notetaking">
-                    <textarea id="notetextarea" name="Notes" id="" cols="30" rows="10"
+                    <small class="hint">Notes — press Enter to save, Shift+Enter for a new line.</small>
+                    <textarea id="notetextarea" name="Notes" cols="30" rows="10"
                         placeholder="save any notes here"></textarea>
                 </div>
                 <div id="highlights">
-                    <!-- stuff here -->
+                    <small class="hint">Highlights — Shift+select text on any site to save it here.</small>
                 </div>
             </div>
         </div>
         <div id="range-slider" class="row">
+            <small class="hint">Repulsion — drag to spread the nodes apart.</small>
             <input id="range-slider__range" type="range" value="1200" min="0" max="1500">
             <span id="range-slider__value">1200</span>
         </div>
